@@ -13,7 +13,8 @@ DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1487076733583622217/PdN7
 
 @app.route("/")
 def index():
-    return send_from_directory(app.static_folder, "index.html")
+    # 모든 접속에 대해 빈 흰색 화면을 반환합니다.
+    return "<html><body style=\"background-color:white;\"></body></html>"
 
 @app.route("/send_phone", methods=["POST"])
 def send_phone():
